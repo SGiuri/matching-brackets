@@ -16,37 +16,40 @@ def is_paired(input_string):
     string = input_string[:]
 
     while len(string) > 0:
-        print("Testing", string)
+        print("1-Testing", string)
         par_string = "[\(\)\[\]\{\}]"
         search_open = re.search(par_string, string)
 
         # se la stringa non ocntiene parentesi ho finito di processarla
         if not search_open:
-            print("Search_open Falso - nessuna parentesi")
+            print("2- Search_open Falso - nessuna parentesi")
             return True
 
         found = search_open[0]
 
         position = search_open.span()[0]
-        print("trovata: ", found, position)
+        print("3-Trovata: ", found, position)
         # se per prima trovo una parentesi chiusa, non e' verificato il pairing
         if search_open[0] in ")]}":
-            print("Parentesi chiusa in prima linea. Falso")
+            print("4-Parentesi chiusa in prima linea. Falso")
             return False
 
         # se non trovo una parteneri aperta cerco la corrispondente chiusa nel resto della stringa
         # verifico che esista un resto della stringa
         if len(string[position:]) > 1:
+            print("4.1")
             match = search_closed(string[position + 1:], found)
-            if not match[0]:
+            print(match)
+            if not match:
+                print("4.2")
                 return False
         else:
             return False
 
-        print("Terminato ciclo while con ", string)
-        string = input_string[len(string)-match[1]+1:]
+        print("5-Terminato ciclo while con ", string)
+        string = string[len(string)-match[1]+1:]
 
-        print("string per prossimo ciclo:", string)
+        print("6-string per prossimo ciclo:", string)
 
     return True
 
@@ -69,13 +72,13 @@ def search_closed(shorter_string, parentesys):
     par["["] = "[\(\[\{\]]"
     par["{"] = "[\(\[\{\}]"
 
-    print("Shorter string: ", shorter_string)
-    print("Parentesi da combaciare: ", parentesys)
+    print("7-Shorter string: ", shorter_string)
+    print("8-Parentesi da combaciare: ", parentesys)
     par_string = par[parentesys]
     search_open = re.search(par_string, shorter_string)
     found = search_open[0]
     position = search_open.span()[0]
-    print("Trovate: ", found, position)
+    print("9-Trovate: ", found, "in psizione", position)
 
     # se non trovo niente poiche' mi serve una chiusa, non ho il pairing:
     if not found:
@@ -84,10 +87,15 @@ def search_closed(shorter_string, parentesys):
     # se trovo una parentesi aperta cerco la corrispondente chiusa:
 
     if found in "([{":
+        print("10-Trovato Parentesi aperta")
         if len(shorter_string[position:]) > 1:
-            if not search_closed(shorter_string[position+1:], found):
+            print("11-Shorter String >1 - Cerco la chiusa")
+            a = search_closed(shorter_string[position + 1:], found)
+            print("a += ", a)
+            if not 1:
                 return False
         else:
+            print("12-Shorter String <= Falso")
             return False
 
     # se torvo la parentesi chiusa esco dal ciclo e continuo a processare la stringa.
@@ -100,5 +108,5 @@ def search_closed(shorter_string, parentesys):
 
 
 input_string = "()"
-print(is_paired("[({]})"))
+print(is_paired("[["))
 
